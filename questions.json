@@ -1,0 +1,623 @@
+[
+  {
+    "id": "sports",
+    "name": "Sports",
+    "icon": "Trophy",
+    "questions": [
+      {
+        "id": 1765778623839,
+        "type": "meaning",
+        "content": "Que veut dire le verbe se reposer ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Se reposer (infinitive) means to rest",
+        "audioText": "Que veut dire le verbe se reposer ?"
+      },
+      {
+        "id": 1765778623840,
+        "type": "meaning",
+        "content": "Que fait-on quand on est fatigué ?",
+        "instruction": "Translate / Meaning",
+        "answer": "On se repose",
+        "audioText": "Que fait-on quand on est fatigué ?"
+      },
+      {
+        "id": 1765778623841,
+        "type": "meaning",
+        "content": "Tu te reposes le week-end ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, je me repose",
+        "audioText": "Tu te reposes le week-end ?"
+      },
+      {
+        "id": 1765778623842,
+        "type": "meaning",
+        "content": "Que veut dire le verbe se détendre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Se détendre (infinitive) means to relax",
+        "audioText": "Que veut dire le verbe se détendre ?"
+      },
+      {
+        "id": 1765778623843,
+        "type": "meaning",
+        "content": "Comment te détends-tu après le travail ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me détends",
+        "audioText": "Comment te détends-tu après le travail ?"
+      },
+      {
+        "id": 1765778623844,
+        "type": "meaning",
+        "content": "Tu te détends comment ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me détends en me promenant",
+        "audioText": "Tu te détends comment ?"
+      },
+      {
+        "id": 1765778623845,
+        "type": "meaning",
+        "content": "Que veut dire le verbe s’ennuyer ?",
+        "instruction": "Translate / Meaning",
+        "answer": "S’ennuyer (infinitive) means to be bored",
+        "audioText": "Que veut dire le verbe s’ennuyer ?"
+      },
+      {
+        "id": 1765778623846,
+        "type": "meaning",
+        "content": "Que fais-tu quand tu t’ennuies ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je cherche une occupation",
+        "audioText": "Que fais-tu quand tu t’ennuies ?"
+      },
+      {
+        "id": 1765778623847,
+        "type": "meaning",
+        "content": "Tu t’ennuies aujourd’hui ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, je m’ennuie",
+        "audioText": "Tu t’ennuies aujourd’hui ?"
+      },
+      {
+        "id": 1765778623848,
+        "type": "meaning",
+        "content": "Que veut dire le nom le temps libre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Le temps libre means free time",
+        "audioText": "Que veut dire le nom le temps libre ?"
+      },
+      {
+        "id": 1765778623849,
+        "type": "meaning",
+        "content": "Que fais-tu pendant ton temps libre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me repose",
+        "audioText": "Que fais-tu pendant ton temps libre ?"
+      },
+      {
+        "id": 1765778623850,
+        "type": "meaning",
+        "content": "As-tu beaucoup de temps libre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, j’ai du temps libre",
+        "audioText": "As-tu beaucoup de temps libre ?"
+      },
+      {
+        "id": 1765778623851,
+        "type": "meaning",
+        "content": "Que veut dire le verbe s’occuper ?",
+        "instruction": "Translate / Meaning",
+        "answer": "S’occuper (infinitive) means to keep busy",
+        "audioText": "Que veut dire le verbe s’occuper ?"
+      },
+      {
+        "id": 1765778623852,
+        "type": "meaning",
+        "content": "Que fais-tu pour t’occuper ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je fais du jardinage",
+        "audioText": "Que fais-tu pour t’occuper ?"
+      },
+      {
+        "id": 1765778623853,
+        "type": "meaning",
+        "content": "Tu t’occupes comment le dimanche ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me promène",
+        "audioText": "Tu t’occupes comment le dimanche ?"
+      },
+      {
+        "id": 1765778623854,
+        "type": "meaning",
+        "content": "Que veut dire le verbe sortir ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Sortir (infinitive) means to go out",
+        "audioText": "Que veut dire le verbe sortir ?"
+      },
+      {
+        "id": 1765778623855,
+        "type": "meaning",
+        "content": "Où sortent les jeunes le soir ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Ils sortent en boîte",
+        "audioText": "Où sortent les jeunes le soir ?"
+      },
+      {
+        "id": 1765778623856,
+        "type": "meaning",
+        "content": "Tu sors ce soir ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, je sors",
+        "audioText": "Tu sors ce soir ?"
+      },
+      {
+        "id": 1765778623857,
+        "type": "meaning",
+        "content": "Que veut dire le nom une boîte de nuit ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Une boîte de nuit means a nightclub",
+        "audioText": "Que veut dire le nom une boîte de nuit ?"
+      },
+      {
+        "id": 1765778623858,
+        "type": "meaning",
+        "content": "Pourquoi va-t-on en boîte ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Pour danser",
+        "audioText": "Pourquoi va-t-on en boîte ?"
+      },
+      {
+        "id": 1765778623859,
+        "type": "meaning",
+        "content": "Tu aimes aller en boîte ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, j’aime danser",
+        "audioText": "Tu aimes aller en boîte ?"
+      },
+      {
+        "id": 1765778623860,
+        "type": "meaning",
+        "content": "Que veut dire le verbe danser ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Danser (infinitive) means to dance",
+        "audioText": "Que veut dire le verbe danser ?"
+      },
+      {
+        "id": 1765778623861,
+        "type": "meaning",
+        "content": "Que fait-on en boîte ?",
+        "instruction": "Translate / Meaning",
+        "answer": "On danse",
+        "audioText": "Que fait-on en boîte ?"
+      },
+      {
+        "id": 1765778623862,
+        "type": "meaning",
+        "content": "Tu danses bien ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, j’aime danser",
+        "audioText": "Tu danses bien ?"
+      },
+      {
+        "id": 1765778623863,
+        "type": "meaning",
+        "content": "Que veut dire le verbe se promener ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Se promener (infinitive) means to take a walk",
+        "audioText": "Que veut dire le verbe se promener ?"
+      },
+      {
+        "id": 1765778623864,
+        "type": "meaning",
+        "content": "Que fais-tu quand tu te balades ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me promène",
+        "audioText": "Que fais-tu quand tu te balades ?"
+      },
+      {
+        "id": 1765778623865,
+        "type": "meaning",
+        "content": "Tu veux te promener ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, avec plaisir",
+        "audioText": "Tu veux te promener ?"
+      },
+      {
+        "id": 1765778623866,
+        "type": "meaning",
+        "content": "Que veut dire l’expression faire les magasins ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Faire les magasins means to go shopping",
+        "audioText": "Que veut dire l’expression faire les magasins ?"
+      },
+      {
+        "id": 1765778623867,
+        "type": "meaning",
+        "content": "Que font les filles en ville ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Elles font les magasins",
+        "audioText": "Que font les filles en ville ?"
+      },
+      {
+        "id": 1765778623868,
+        "type": "meaning",
+        "content": "Tu fais les magasins le samedi ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, souvent",
+        "audioText": "Tu fais les magasins le samedi ?"
+      },
+      {
+        "id": 1765778623869,
+        "type": "meaning",
+        "content": "Que veut dire le verbe tricoter ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Tricoter (infinitive) means to knit",
+        "audioText": "Que veut dire le verbe tricoter ?"
+      },
+      {
+        "id": 1765778623870,
+        "type": "meaning",
+        "content": "Que fait Jeanne le soir ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Elle tricote",
+        "audioText": "Que fait Jeanne le soir ?"
+      },
+      {
+        "id": 1765778623871,
+        "type": "meaning",
+        "content": "Que tricote-t-elle ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Des pulls",
+        "audioText": "Que tricote-t-elle ?"
+      },
+      {
+        "id": 1765778623872,
+        "type": "meaning",
+        "content": "Que veut dire le verbe coudre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Coudre (infinitive) means to sew",
+        "audioText": "Que veut dire le verbe coudre ?"
+      },
+      {
+        "id": 1765778623873,
+        "type": "meaning",
+        "content": "Que fait Jeanne avec la couture ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Elle coud des vêtements",
+        "audioText": "Que fait Jeanne avec la couture ?"
+      },
+      {
+        "id": 1765778623874,
+        "type": "meaning",
+        "content": "Elle coud bien ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, elle coud très bien",
+        "audioText": "Elle coud bien ?"
+      },
+      {
+        "id": 1765778623875,
+        "type": "meaning",
+        "content": "Que veut dire le verbe jardiner ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Jardiner (infinitive) means to garden",
+        "audioText": "Que veut dire le verbe jardiner ?"
+      },
+      {
+        "id": 1765778623876,
+        "type": "meaning",
+        "content": "Que fait Agnès tous les jours ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Elle jardine",
+        "audioText": "Que fait Agnès tous les jours ?"
+      },
+      {
+        "id": 1765778623877,
+        "type": "meaning",
+        "content": "Elle jardine où ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Dans son jardin",
+        "audioText": "Elle jardine où ?"
+      },
+      {
+        "id": 1765778623878,
+        "type": "meaning",
+        "content": "Que veut dire le verbe bricoler ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Bricoler (infinitive) means to do DIY",
+        "audioText": "Que veut dire le verbe bricoler ?"
+      },
+      {
+        "id": 1765778623879,
+        "type": "meaning",
+        "content": "Que fait Jean-Claude le week-end ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Il bricole",
+        "audioText": "Que fait Jean-Claude le week-end ?"
+      },
+      {
+        "id": 1765778623880,
+        "type": "meaning",
+        "content": "Il bricole avec quoi ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Avec des outils",
+        "audioText": "Il bricole avec quoi ?"
+      },
+      {
+        "id": 1765778623881,
+        "type": "meaning",
+        "content": "Que veut dire le nom un atelier ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Un atelier means a workshop",
+        "audioText": "Que veut dire le nom un atelier ?"
+      },
+      {
+        "id": 1765778623882,
+        "type": "meaning",
+        "content": "Où bricole Jean-Claude ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Dans son atelier",
+        "audioText": "Où bricole Jean-Claude ?"
+      },
+      {
+        "id": 1765778623883,
+        "type": "meaning",
+        "content": "As-tu un atelier chez toi ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Non, pas encore",
+        "audioText": "As-tu un atelier chez toi ?"
+      },
+      {
+        "id": 1765778623884,
+        "type": "meaning",
+        "content": "Que veut dire le verbe se déguiser ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Se déguiser (infinitive) means to dress up",
+        "audioText": "Que veut dire le verbe se déguiser ?"
+      },
+      {
+        "id": 1765778623885,
+        "type": "meaning",
+        "content": "Que font les enfants pour le carnaval ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Ils se déguisent",
+        "audioText": "Que font les enfants pour le carnaval ?"
+      },
+      {
+        "id": 1765778623886,
+        "type": "meaning",
+        "content": "En quoi se déguisent-ils ?",
+        "instruction": "Translate / Meaning",
+        "answer": "En princesse et en dinosaure",
+        "audioText": "En quoi se déguisent-ils ?"
+      },
+      {
+        "id": 1765778623887,
+        "type": "meaning",
+        "content": "Que veut dire le nom un déguisement ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Un déguisement means a costume",
+        "audioText": "Que veut dire le nom un déguisement ?"
+      },
+      {
+        "id": 1765778623888,
+        "type": "meaning",
+        "content": "Les enfants aiment les déguisements ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, ils adorent",
+        "audioText": "Les enfants aiment les déguisements ?"
+      },
+      {
+        "id": 1765778623889,
+        "type": "meaning",
+        "content": "Que veut dire le verbe jouer ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Jouer (infinitive) means to play",
+        "audioText": "Que veut dire le verbe jouer ?"
+      },
+      {
+        "id": 1765778623890,
+        "type": "meaning",
+        "content": "À quoi jouent les enfants ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Ils jouent avec des jouets",
+        "audioText": "À quoi jouent les enfants ?"
+      },
+      {
+        "id": 1765778623891,
+        "type": "meaning",
+        "content": "Tu joues souvent ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, avec mes amis",
+        "audioText": "Tu joues souvent ?"
+      },
+      {
+        "id": 1765778623892,
+        "type": "meaning",
+        "content": "Que veut dire le nom un jouet ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Un jouet means a toy",
+        "audioText": "Que veut dire le nom un jouet ?"
+      },
+      {
+        "id": 1765778623893,
+        "type": "meaning",
+        "content": "Cite un jouet pour enfants ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Une poupée",
+        "audioText": "Cite un jouet pour enfants ?"
+      },
+      {
+        "id": 1765778623894,
+        "type": "meaning",
+        "content": "Que veut dire le nom un jeu de société ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Un jeu de société means a board game",
+        "audioText": "Que veut dire le nom un jeu de société ?"
+      },
+      {
+        "id": 1765778623895,
+        "type": "meaning",
+        "content": "Quand parle-t-on d’un jeu de société ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Quand on joue à plusieurs",
+        "audioText": "Quand parle-t-on d’un jeu de société ?"
+      },
+      {
+        "id": 1765778623896,
+        "type": "meaning",
+        "content": "Tu aimes les jeux de société ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, beaucoup",
+        "audioText": "Tu aimes les jeux de société ?"
+      },
+      {
+        "id": 1765778623897,
+        "type": "meaning",
+        "content": "Que veut dire le nom les cartes ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Les cartes means playing cards",
+        "audioText": "Que veut dire le nom les cartes ?"
+      },
+      {
+        "id": 1765778623898,
+        "type": "meaning",
+        "content": "Que faut-il faire avant de jouer aux cartes ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Il faut battre les cartes",
+        "audioText": "Que faut-il faire avant de jouer aux cartes ?"
+      },
+      {
+        "id": 1765778623899,
+        "type": "meaning",
+        "content": "Que fais-tu quand tu trouves le temps long ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je m’ennuie",
+        "audioText": "Que fais-tu quand tu trouves le temps long ?"
+      },
+      {
+        "id": 1765778623900,
+        "type": "meaning",
+        "content": "Quand on s’ennuie, que cherche-t-on ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Une occupation",
+        "audioText": "Quand on s’ennuie, que cherche-t-on ?"
+      },
+      {
+        "id": 1765778623901,
+        "type": "meaning",
+        "content": "Que fais-tu pour te détendre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me promène",
+        "audioText": "Que fais-tu pour te détendre ?"
+      },
+      {
+        "id": 1765778623902,
+        "type": "meaning",
+        "content": "Tu préfères te reposer ou sortir ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je préfère me reposer",
+        "audioText": "Tu préfères te reposer ou sortir ?"
+      },
+      {
+        "id": 1765778623903,
+        "type": "meaning",
+        "content": "Que fais-tu le dimanche ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je jardine",
+        "audioText": "Que fais-tu le dimanche ?"
+      },
+      {
+        "id": 1765778623904,
+        "type": "meaning",
+        "content": "Pourquoi fais-tu du jardinage ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Pour me détendre",
+        "audioText": "Pourquoi fais-tu du jardinage ?"
+      },
+      {
+        "id": 1765778623905,
+        "type": "meaning",
+        "content": "Tu fais la fête parfois ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, avec mes amis",
+        "audioText": "Tu fais la fête parfois ?"
+      },
+      {
+        "id": 1765778623906,
+        "type": "meaning",
+        "content": "Que fais-tu quand tu fais la fête ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je danse",
+        "audioText": "Que fais-tu quand tu fais la fête ?"
+      },
+      {
+        "id": 1765778623907,
+        "type": "meaning",
+        "content": "Comment occupes-tu ton temps libre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Je me repose et je me détends",
+        "audioText": "Comment occupes-tu ton temps libre ?"
+      },
+      {
+        "id": 1765778623908,
+        "type": "meaning",
+        "content": "Aimes-tu être actif pendant ton temps libre ?",
+        "instruction": "Translate / Meaning",
+        "answer": "Oui, j’aime rester actif",
+        "audioText": "Aimes-tu être actif pendant ton temps libre ?"
+      }
+    ]
+  },
+  {
+    "id": "food",
+    "name": "Food",
+    "icon": "Utensils",
+    "questions": [
+      {
+        "id": 1,
+        "type": "meaning",
+        "content": "Le Fromage",
+        "instruction": "What does this mean?",
+        "answer": "Cheese",
+        "audioText": "Le Fromage"
+      },
+      {
+        "id": 2,
+        "type": "translation",
+        "content": "Bread",
+        "instruction": "What is the French word for?",
+        "answer": "Le Pain",
+        "audioText": null
+      },
+      {
+        "id": 3,
+        "type": "fill_blank",
+        "content": "Je voudrais de ___ (water).",
+        "instruction": "Fill in the blank",
+        "answer": "l'eau",
+        "audioText": "Je voudrais de ..."
+      }
+    ]
+  },
+  {
+    "id": "travel",
+    "name": "Travel",
+    "icon": "Plane",
+    "questions": [
+      {
+        "id": 1,
+        "type": "meaning",
+        "content": "La Gare",
+        "instruction": "What does this mean?",
+        "answer": "Train Station",
+        "audioText": "La Gare"
+      },
+      {
+        "id": 2,
+        "type": "translation",
+        "content": "Airport",
+        "instruction": "What is the French word for?",
+        "answer": "L'Aéroport",
+        "audioText": null
+      }
+    ]
+  }
+]
