@@ -23,7 +23,7 @@ const useSpeech = () => {
     return () => { synth.onvoiceschanged = null; };
   }, [synth]);
 
-  const speak = useCallback((text, lang = 'fr-FR', onEnd) => {
+  const speak = useCallback((text, lang = 'fr-FR', rate = 0.9, onEnd) => {
     if (!synth || !text) {
       if (onEnd) onEnd();
       return;
@@ -46,7 +46,7 @@ const useSpeech = () => {
     }
 
     utterance.lang = lang;
-    utterance.rate = 0.9;
+    utterance.rate = rate;
 
     // Store ref prevent GC
     activeUtteranceRef.current = utterance;
@@ -87,6 +87,7 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { speak, cancel } = useSpeech();
+  const [speechRate, setSpeechRate] = useState(0.9);
 
   // Load data from server
   useEffect(() => {
@@ -130,47 +131,62 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white font-sans selection:bg-indigo-500/30">
-      <div className="max-w-xl mx-auto min-h-screen flex flex-col relative overflow-hidden">
-
-        {/* Header */}
-        <header className="p-6 pb-2 z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {!selectedCategory && <>
-              <Sparkles className="w-6 h-6 text-yellow-400" />
-              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">French</h1>
-            </>}
-          </div>
+    <div className="h-screen w-full bg-[#0f172a] text-white font-sans selection:bg-indigo-500/30 flex flex-col overflow-hidden">
+      {/* Header */}
+      <header className="p-4 z-10 flex items-center justify-between bg-slate-900/50 backdrop-blur-md border-b border-white/5 h-16 shrink-0">
+        <div className="flex items-center gap-2">
+          {!selectedCategory && <>
+            <Sparkles className="w-5 h-5 text-yellow-400" />
+            <h1 className="text-xl font-bold tracking-tight bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">French</h1>
+          </>}
           {selectedCategory && (
             <button
               onClick={() => { cancel(); setSelectedCategory(null); }}
-              className="p-3 rounded-full bg-white/10 active:scale-95 transition-all text-white"
+              className="p-2 rounded-full bg-white/10 active:scale-95 transition-all text-white mr-2"
             >
-              <ChevronLeft size={28} />
+              <ChevronLeft size={24} />
             </button>
           )}
-        </header>
+        </div>
 
-        <main className="flex-1 p-4 flex flex-col relative z-20">
-          <AnimatePresence mode="wait">
-            {!selectedCategory ? (
-              <CategoryList
-                categories={categories}
-                onSelect={setSelectedCategory}
-                key="list"
-              />
-            ) : (
-              <QuizView
-                category={selectedCategory}
-                onUpdateQuestions={handleUpdateCategory}
-                speak={speak}
-                cancelSpeech={cancel}
-                key="quiz"
-              />
-            )}
-          </AnimatePresence>
-        </main>
-      </div>
+        <div className="flex items-center gap-4">
+          {/* Speed Slider */}
+          <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5">
+            <span className="text-xs text-slate-400 font-mono">Speed</span>
+            <input
+              type="range"
+              min="0.5"
+              max="1.2"
+              step="0.1"
+              value={speechRate}
+              onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+              className="w-16 md:w-24 accent-indigo-500 h-1 rounded-lg cursor-pointer"
+            />
+            <span className="text-xs text-white w-6">{speechRate}x</span>
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1 w-full max-w-2xl mx-auto p-4 flex flex-col relative z-20 overflow-hidden">
+        <AnimatePresence mode="wait">
+          {!selectedCategory ? (
+            <CategoryList
+              categories={categories}
+              onSelect={setSelectedCategory}
+              key="list"
+            />
+          ) : (
+            <QuizView
+              category={selectedCategory}
+              onUpdateQuestions={handleUpdateCategory}
+              speak={speak}
+              speechRate={speechRate}
+              cancelSpeech={cancel}
+              key="quiz"
+            />
+          )}
+        </AnimatePresence>
+      </main>
     </div>
   );
 }
@@ -210,7 +226,7 @@ const CategoryList = ({ categories, onSelect }) => {
   );
 };
 
-const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
+const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -244,14 +260,14 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
     const langA = 'fr-FR';
 
     // Phase 1: Speak Question (1st time)
-    speak(textToSpeakQ, 'fr-FR', () => {
+    speak(textToSpeakQ, 'fr-FR', speechRate, () => {
 
       // Wait 1s
       timerRef.current = setTimeout(() => {
         if (!mountedRef.current || !autoPlay) return;
 
         // Phase 2: Speak Question (2nd time)
-        speak(textToSpeakQ, 'fr-FR', () => {
+        speak(textToSpeakQ, 'fr-FR', speechRate, () => {
 
           // Phase 3: Wait 2 seconds before answer
           timerRef.current = setTimeout(() => {
@@ -259,7 +275,7 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
 
             // Phase 4: Reveal & Speak Answer
             setShowAnswer(true);
-            speak(textToSpeakA, langA, () => {
+            speak(textToSpeakA, langA, speechRate, () => {
 
               // Phase 5: Wait 2 seconds before next question
               timerRef.current = setTimeout(() => {
@@ -272,7 +288,7 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
         });
       }, 1000);
     });
-  }, [autoPlay, question, speak]);
+  }, [autoPlay, question, speak, speechRate]);
 
   useEffect(() => {
     if (autoPlay) {
@@ -281,7 +297,7 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
       clearTimeout(timerRef.current);
       cancelSpeech();
     }
-  }, [autoPlay, currentIndex]); // Rerun when index changes if autoplay is on
+  }, [autoPlay, currentIndex, runAutoLoop]); // Rerun when index changes if autoplay is on
 
   // --- Navigation & Actions ---
 
@@ -323,7 +339,7 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
   };
 
   const manualSpeak = () => {
-    speak(question.audioText || question.content);
+    speak(question.audioText || question.content, 'fr-FR', speechRate);
   };
 
   // --- Editor Parsers ---
@@ -458,7 +474,7 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                onClick={() => { setShowAnswer(true); speak(question.answer); }}
+                onClick={() => { setShowAnswer(true); speak(question.answer, 'fr-FR', speechRate); }}
                 className="px-8 py-3 bg-white/10 border border-white/20 rounded-full text-xl font-medium"
               >
                 Show Answer
