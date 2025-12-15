@@ -29,7 +29,10 @@ const useSpeech = () => {
       return;
     }
 
-    // Cancel any current speech before starting new
+    // Safety: Clear active ref so pending onEnd/onError handlers don't fire for previous utterance
+    activeUtteranceRef.current = null;
+
+    // Cancel any current speech
     synth.cancel();
     isCancelled.current = false;
 
@@ -48,17 +51,23 @@ const useSpeech = () => {
     utterance.lang = lang;
     utterance.rate = rate;
 
-    // Store ref prevent GC
+    // Store ref prevent GC and for validation
     activeUtteranceRef.current = utterance;
 
     utterance.onend = () => {
-      activeUtteranceRef.current = null; // release
-      if (!isCancelled.current && onEnd) onEnd();
+      // Only fire if this is still the active utterance (hasn't been cancelled/superseded)
+      if (activeUtteranceRef.current === utterance && !isCancelled.current) {
+        activeUtteranceRef.current = null;
+        if (onEnd) onEnd();
+      }
     };
     utterance.onerror = (e) => {
       console.error("Speech error", e);
-      activeUtteranceRef.current = null;
-      if (!isCancelled.current && onEnd) onEnd();
+      // Same check for error
+      if (activeUtteranceRef.current === utterance && !isCancelled.current) {
+        activeUtteranceRef.current = null;
+        if (onEnd) onEnd();
+      }
     };
 
     synth.speak(utterance);
