@@ -242,90 +242,96 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
   const [autoPlay, setAutoPlay] = useState(false);
   const [jumpInput, setJumpInput] = useState('');
 
-  // Refs for managing timeout loops
+  // Refs for managing timeout loops and preventing stale closures
   const timerRef = useRef(null);
-  const mountedRef = useRef(true);
+  const loopIdRef = useRef(0);
 
   const question = category.questions[currentIndex];
 
+  // Cleanup on unmount
   useEffect(() => {
-    mountedRef.current = true;
     return () => {
-      mountedRef.current = false;
       clearTimeout(timerRef.current);
       cancelSpeech();
     };
   }, [cancelSpeech]);
 
   // --- Auto Play Logic ---
-  // The loop: Speak Q -> Wait 3s -> Show & Speak A -> Wait 2s -> Next
-
-  const runAutoLoop = useCallback(() => {
-    if (!mountedRef.current || !autoPlay) return;
+  const startAutoLoop = useCallback(() => {
+    // Increment loop ID to invalidate any previous running loops
+    const currentLoopId = loopIdRef.current + 1;
+    loopIdRef.current = currentLoopId;
 
     const textToSpeakQ = question.audioText || question.content;
     const textToSpeakA = question.answer;
-    // Always speak answer in French as requested ("speak like a french person")
     const langA = 'fr-FR';
+
+    // Helper to check validity
+    const isValid = () => autoPlay && loopIdRef.current === currentLoopId;
 
     // Phase 1: Speak Question (1st time)
     speak(textToSpeakQ, 'fr-FR', speechRate, () => {
+      if (!isValid()) return;
 
       // Wait 1s
       timerRef.current = setTimeout(() => {
-        if (!mountedRef.current || !autoPlay) return;
+        if (!isValid()) return;
 
         // Phase 2: Speak Question (2nd time)
         speak(textToSpeakQ, 'fr-FR', speechRate, () => {
+          if (!isValid()) return;
 
           // Phase 3: Wait 2 seconds before answer
           timerRef.current = setTimeout(() => {
-            if (!mountedRef.current || !autoPlay) return;
+            if (!isValid()) return;
 
             // Phase 4: Reveal & Speak Answer
             setShowAnswer(true);
             speak(textToSpeakA, langA, speechRate, () => {
+              if (!isValid()) return;
 
               // Phase 5: Wait 2 seconds before next question
               timerRef.current = setTimeout(() => {
-                if (!mountedRef.current || !autoPlay) return;
+                if (!isValid()) return;
                 handleNext(true);
-              }, 2000);
+              }, 2000); // Fixed 2s delay between cards
             });
 
-          }, 2000);
+          }, 2000); // Fixed 2s delay thinking time
         });
-      }, 1000);
+      }, 1000); // Fixed 1s delay between repeats
     });
   }, [autoPlay, question, speak, speechRate]);
 
   useEffect(() => {
     if (autoPlay) {
-      runAutoLoop();
+      // Start a new loop sequence
+      startAutoLoop();
     } else {
+      // Stop everything
       clearTimeout(timerRef.current);
       cancelSpeech();
+      loopIdRef.current++; // Invalidate current loop
     }
-  }, [autoPlay, currentIndex, runAutoLoop]); // Rerun when index changes if autoplay is on
+  }, [autoPlay, currentIndex, startAutoLoop]); // Re-run if index changes (next card) or loop logic changes
+
 
   // --- Navigation & Actions ---
 
   const handleNext = (isAuto = false) => {
+    // If manual click, strictly stop autoplay? Or just reset?
+    // User wants control. Let's keep autoplay active if it is active, but reset flow.
+    // The useEffect dependency on `currentIndex` handles the restart of the loop automatically!
+    // We just need to update index.
     if (!isAuto) {
-      // Manual interaction stops autoplay usually? Or we let it continue?
-      // User requirement: "Stop this process only if they click the speaker button again."
-      // So manual navigation shouldn't strictly stop it, but it might get messy.
-      // Let's keep autoplay TRUE, but we need to cancel current speech/timers to restart loop on new slide.
-      clearTimeout(timerRef.current);
+      // If manual navigation, we might want to canceling pending speech immediately to feel snappy
       cancelSpeech();
     }
-
     setShowAnswer(false);
     setCurrentIndex(prev => (prev + 1) % category.questions.length);
   };
 
   const handlePrev = () => {
-    clearTimeout(timerRef.current);
     cancelSpeech();
     setShowAnswer(false);
     setCurrentIndex(prev => (prev - 1 + category.questions.length) % category.questions.length);
@@ -335,7 +341,6 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
     e.preventDefault();
     const num = parseInt(jumpInput);
     if (!isNaN(num) && num > 0 && num <= category.questions.length) {
-      clearTimeout(timerRef.current);
       cancelSpeech();
       setShowAnswer(false);
       setCurrentIndex(num - 1);
@@ -348,6 +353,8 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
   };
 
   const manualSpeak = () => {
+    // If autoplay is ON, clicking this shouldn't break the loop logic (ref check protects it),
+    // but it might overlap audio. Let's force audio.
     speak(question.audioText || question.content, 'fr-FR', speechRate);
   };
 
@@ -355,28 +362,15 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
   const [rawInput, setRawInput] = useState('');
   const parseAndSave = () => {
     let segments = rawInput.split(/\n+/);
-    // Basic comma fallback logic
     if (segments.length === 1 && segments[0].includes(',') && !segments[0].includes('.')) {
-      // Only comma separated, no dots? Maybe "Q1, Ans1, Q2, Ans2"
-      // The prompt says "dot (.) btween a question and an answer"
-      // Let's rely on newlines primarily for separation of PAIRS, and dots for QvsA.
-      // User might paste:
-      // Chat. Cat
-      // Chien. Dog
-      // This is split by newline correctly.
+      // Comma fallback
     }
 
-    // If user meant "Q1. A1, Q2. A2" (comma separated pairs on one line?)
-    // Let's support dot separation primarily.
-
     const newQuestions = segments.map((seg, idx) => {
-      // Split by first dot found
       const dotIndex = seg.indexOf('.');
       if (dotIndex === -1) return null;
-
       const qText = seg.substring(0, dotIndex).trim();
       const aText = seg.substring(dotIndex + 1).trim();
-
       if (!qText || !aText) return null;
 
       return {
@@ -420,55 +414,78 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
     );
   }
 
-  // --- Main Quiz UI ---
+  // --- Main Quiz UI (Optimized for Mobile Vertical Space) ---
   return (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex flex-col h-full relative">
 
-      {/* Top Bar: Nav & Count */}
-      <div className="flex items-center justify-between mb-4">
-        <form onSubmit={handleJump} className="flex items-center bg-slate-800 rounded-lg p-1 border border-white/10">
-          <span className="text-xs text-slate-400 pl-2">#</span>
-          <input
-            type="number"
-            value={jumpInput}
-            onChange={e => setJumpInput(e.target.value)}
-            className="w-8 bg-transparent text-center text-white outline-none text-sm" // mobile focus?
-            placeholder={currentIndex + 1}
-          />
-        </form>
-
-        <div className="text-slate-400 text-sm font-mono tracking-widest">
-          {currentIndex + 1} / {category.questions.length}
+      {/* Top Controls: Jump, Count, Edit, Play Toggle */}
+      <div className="flex items-center justify-between mb-2 shrink-0 h-14">
+        <div className="flex items-center gap-3">
+          <form onSubmit={handleJump} className="flex items-center bg-slate-800 rounded-lg p-1 border border-white/10 h-10">
+            <span className="text-xs text-slate-400 pl-2">#</span>
+            <input
+              type="number"
+              value={jumpInput}
+              onChange={e => setJumpInput(e.target.value)}
+              className="w-8 bg-transparent text-center text-white outline-none text-sm"
+              placeholder={currentIndex + 1}
+            />
+          </form>
+          <div className="text-slate-400 text-sm font-mono tracking-widest">
+            of {category.questions.length}
+          </div>
         </div>
 
-        <button onClick={() => setIsEditing(true)} className="text-slate-400 hover:text-white">
-          <Edit3 size={20} />
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setIsEditing(true)} className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/5">
+            <Edit3 size={24} />
+          </button>
+
+          {/* Prominent Play/Pause Toggle */}
+          <button
+            onClick={toggleAutoPlay}
+            className={`flex items-center gap-2 px-5 py-2 rounded-full font-bold shadow-lg transition-all ${autoPlay
+                ? 'bg-rose-500 hover:bg-rose-600 text-white'
+                : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+              }`}
+          >
+            {autoPlay ? (
+              <>
+                <Square size={18} fill="currentColor" />
+                <span className="uppercase text-sm tracking-wide">Stop</span>
+              </>
+            ) : (
+              <>
+                <Play size={18} fill="currentColor" />
+                <span className="uppercase text-sm tracking-wide">Play</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Main Card */}
-      <div className="flex-1 flex flex-col items-center justify-center relative min-h-[400px]">
-        {/* Large Play Toggle */}
-        <button
-          onClick={toggleAutoPlay}
-          className={`absolute top-0 right-0 z-10 p-4 rounded-full transition-all shadow-xl ${autoPlay ? 'bg-red-500/80 text-white' : 'bg-green-500/80 text-white'}`}
-          title={autoPlay ? "Stop Auto-Play" : "Start Auto-Play"}
-        >
-          {autoPlay ? <Square fill="currentColor" size={24} /> : <Play fill="currentColor" size={24} />}
-        </button>
+      {/* Main Content Area - Maximized Space */}
+      <div className="flex-1 flex flex-col items-center justify-evenly py-4 relative">
 
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full text-center space-y-8"
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            className="w-full text-center flex flex-col gap-4"
           >
-            {/* Question */}
-            <div onClick={manualSpeak} className="cursor-pointer active:scale-95 transition-transform">
-              <p className="text-indigo-300 text-lg uppercase tracking-wider mb-4 opacity-80">{question.instruction}</p>
-              <h2 className="text-5xl md:text-6xl font-bold text-white drop-shadow-2xl leading-tight">
+            {/* Instruction */}
+            <p className="text-indigo-300 text-xl md:text-2xl font-medium tracking-wide opacity-90">
+              {question.instruction}
+            </p>
+
+            {/* Question Text - HUGE */}
+            <div
+              onClick={manualSpeak}
+              className="cursor-pointer active:scale-95 transition-transform"
+            >
+              <h2 className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl leading-tight tracking-tight mt-2">
                 {question.content}
               </h2>
             </div>
@@ -476,56 +493,58 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
         </AnimatePresence>
 
         {/* Answer Section */}
-        <div className="mt-12 h-32 w-full flex items-center justify-center">
+        <div className="w-full text-center min-h-[140px] flex items-center justify-center">
           <AnimatePresence>
-            {!showAnswer && !autoPlay && (
+            {!showAnswer && !autoPlay ? (
               <motion.button
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 onClick={() => { setShowAnswer(true); speak(question.answer, 'fr-FR', speechRate); }}
-                className="px-8 py-3 bg-white/10 border border-white/20 rounded-full text-xl font-medium"
+                className="px-10 py-5 bg-white/10 hover:bg-white/15 border border-white/20 rounded-3xl text-2xl font-bold backdrop-blur-sm"
               >
                 Show Answer
               </motion.button>
-            )}
-            {showAnswer && (
+            ) : showAnswer ? (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center gap-4"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full"
               >
-                <div className="text-4xl md:text-5xl font-bold text-emerald-300 drop-shadow-lg">
+                <div className="text-5xl md:text-7xl font-bold text-emerald-400 drop-shadow-lg">
                   {question.answer}
                 </div>
               </motion.div>
+            ) : (
+              /* Placeholder for layout stability during auto-play wait */
+              <div className="h-10"></div>
             )}
           </AnimatePresence>
         </div>
       </div>
 
-      {/* Bottom Controls */}
-      <div className="grid grid-cols-3 gap-4 pt-6 mt-auto">
+      {/* Bottom Nav Controls */}
+      <div className="grid grid-cols-3 gap-6 pt-4 shrink-0 h-24">
         <button
           onClick={handlePrev}
-          className="flex items-center justify-center p-6 rounded-2xl bg-slate-800 text-white active:bg-slate-700 transition-colors"
+          className="flex items-center justify-center rounded-3xl bg-slate-800/80 hover:bg-slate-800 text-white active:bg-slate-700 transition-colors border border-white/5"
         >
-          <ArrowLeft size={32} />
+          <ArrowLeft size={36} />
         </button>
 
-        {/* Center Button - Replay Audio Manual */}
+        {/* Replay Audio */}
         <button
           onClick={manualSpeak}
-          className="flex items-center justify-center p-6 rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 active:scale-95 transition-all"
+          className="flex items-center justify-center rounded-3xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 active:scale-95 transition-all"
         >
-          <Volume2 size={32} />
+          <Volume2 size={40} />
         </button>
 
         <button
           onClick={() => handleNext(false)}
-          className="flex items-center justify-center p-6 rounded-2xl bg-slate-800 text-white active:bg-slate-700 transition-colors"
+          className="flex items-center justify-center rounded-3xl bg-slate-800/80 hover:bg-slate-800 text-white active:bg-slate-700 transition-colors border border-white/5"
         >
-          <ArrowRight size={32} />
+          <ArrowRight size={36} />
         </button>
       </div>
 
