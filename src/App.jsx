@@ -416,56 +416,56 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
 
   // --- Main Quiz UI (Optimized for Mobile Vertical Space) ---
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col h-full relative px-4 pb-2">
 
       {/* Top Controls: Jump, Count, Edit, Play Toggle */}
-      <div className="flex items-center justify-between mb-2 shrink-0 h-14">
+      <div className="flex items-center justify-between mb-4 shrink-0 h-16">
         <div className="flex items-center gap-3">
-          <form onSubmit={handleJump} className="flex items-center bg-slate-800 rounded-lg p-1 border border-white/10 h-10">
+          <form onSubmit={handleJump} className="flex items-center bg-slate-800 rounded-lg p-1 border border-white/10 h-10 shadow-sm">
             <span className="text-xs text-slate-400 pl-2">#</span>
             <input
               type="number"
               value={jumpInput}
               onChange={e => setJumpInput(e.target.value)}
-              className="w-8 bg-transparent text-center text-white outline-none text-sm"
+              className="w-10 bg-transparent text-center text-white outline-none text-base"
               placeholder={currentIndex + 1}
             />
           </form>
-          <div className="text-slate-400 text-sm font-mono tracking-widest">
+          <div className="text-slate-400 text-sm font-mono tracking-widest hidden md:block">
             of {category.questions.length}
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button onClick={() => setIsEditing(true)} className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/5">
+        <div className="flex items-center gap-4">
+          <button onClick={() => setIsEditing(true)} className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/5 active:bg-white/10">
             <Edit3 size={24} />
           </button>
 
           {/* Prominent Play/Pause Toggle */}
           <button
             onClick={toggleAutoPlay}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full font-bold shadow-lg transition-all ${autoPlay
+            className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold shadow-xl transition-all active:scale-95 ${autoPlay
                 ? 'bg-rose-500 hover:bg-rose-600 text-white'
                 : 'bg-emerald-500 hover:bg-emerald-600 text-white'
               }`}
           >
             {autoPlay ? (
               <>
-                <Square size={18} fill="currentColor" />
-                <span className="uppercase text-sm tracking-wide">Stop</span>
+                <Square size={20} fill="currentColor" />
+                <span className="uppercase text-sm tracking-wider font-extrabold">Stop</span>
               </>
             ) : (
               <>
-                <Play size={18} fill="currentColor" />
-                <span className="uppercase text-sm tracking-wide">Play</span>
+                <Play size={20} fill="currentColor" />
+                <span className="uppercase text-sm tracking-wider font-extrabold">Play</span>
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Main Content Area - Maximized Space */}
-      <div className="flex-1 flex flex-col items-center justify-evenly py-4 relative">
+      {/* Main Content Area - Maximized Space & Centered */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-8 py-4 relative w-full">
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -473,19 +473,19 @@ const QuizView = ({ category, onUpdateQuestions, speak, cancelSpeech, speechRate
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className="w-full text-center flex flex-col gap-4"
+            className="w-full max-w-full text-center flex flex-col gap-6 px-1 break-words"
           >
             {/* Instruction */}
-            <p className="text-indigo-300 text-xl md:text-2xl font-medium tracking-wide opacity-90">
+            <p className="text-indigo-300 text-xl font-medium tracking-wide opacity-80 uppercase text-sm">
               {question.instruction}
             </p>
 
-            {/* Question Text - HUGE */}
+            {/* Question Text - HUGE & WRAPPED */}
             <div
               onClick={manualSpeak}
-              className="cursor-pointer active:scale-95 transition-transform"
+              className="cursor-pointer active:scale-95 transition-transform select-none"
             >
-              <h2 className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl leading-tight tracking-tight mt-2">
+              <h2 className="text-5xl xs:text-6xl md:text-8xl font-black text-white drop-shadow-2xl leading-tight tracking-tight px-1">
                 {question.content}
               </h2>
             </div>
