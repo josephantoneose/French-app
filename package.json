@@ -3,13 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": { "start": "node server.js",
+  "scripts": {
+    "start": "node server.js",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
     "body-parser": "^2.2.1",
     "concurrently": "^9.2.1",
     "cors": "^2.8.5",

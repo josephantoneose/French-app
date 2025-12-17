@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FrenchApp</string>
+    <string name="title_activity_main">FrenchApp</string>
+    <string name="package_name">io.french.app</string>
+    <string name="custom_url_scheme">io.french.app</string>
+</resources>
