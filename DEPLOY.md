@@ -1,36 +1,36 @@
+# Deployment Guide (Static Site)
 
-# Deployment Guide
+Great news! Your app has been refactored into a **Static Single Page Application (SPA)**. 
+ This means you don't need a complex Node.js backend server. The app runs entirely in the browser, and data is saved to the user's device (LocalStorage).
 
-To deploy this application so that users can share the database (questions), you need to deploy the Backend (`server.js`) and Frontend (`dist`).
+## Recommended: Vercel (Free & Fastest)
 
-## Option 1: Render.com (Simplest for Node + JSON persistence)
+Vercel is optimized for **Vite** apps like this one.
 
-Render offers a Web Service that can run your server. Note: On the free tier, files (like `questions.json`) are **ephemeral**, meaning if the server restarts (which happens on free tier spin-downs), you lose data. For persistent data, you need a "Disk" (paid) or use a real database.
+### Method 1: Deploy using GitHub (Best)
+1.  **Push your code** to a GitHub repository.
+2.  Go to [Vercel.com](https://vercel.com) and sign up/log in.
+3.  Click **"Add New..."** -> **"Project"**.
+4.  Select your `french_learning_app` repository.
+5.  **Settings**:
+    *   Framework Preset: `Vite` (It should auto-detect this).
+    *   Root Directory: `./` (Default).
+    *   Build Command: `npm run build` (Default).
+    *   Output Directory: `dist` (Default).
+6.  Click **Deploy**.
 
-**However**, for a quick demo:
+### Method 2: Drag & Drop (Netlify)
+1.  Run the build command locally:
+    ```bash
+    npm run build
+    ```
+2.  This creates a `dist` folder in your project.
+3.  Go to [Netlify Drop](https://app.netlify.com/drop).
+4.  Drag and drop the `dist` folder onto the page.
+5.  It will be live in seconds!
 
-1.  **Push code to GitHub**.
-2.  **Create a Web Service** on Render connected to your repo.
-3.  **Build Command**: `npm install && npm run build`
-4.  **Start Command**: `node server.js`
-    *   *Note*: You need to serve the React frontend FROM the Node backend for this to work as a single service.
-
-### Serving Frontend from Backend (Recommended for easy deploy)
-Update `server.js` to serve the static files from `dist`:
-
-```javascript
-// Add these lines to server.js before app.listen
-app.use(express.static(path.join(__dirname, 'dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-```
-
-## Option 2: Frontend (Vercel) + Backend (Render/Heroku/Railway)
-This is better if you want a reliable frontend, but separating them requires configuring CORS and env vars.
-
-## Recommended: Use a Database (Supabase/Firebase)
-Since file-based persistence (`questions.json`) is hard to keep persistent on modern serverless platforms, simply swapping the `server.js` logic to read/write from a **MongoDB Atlas** (Free Tier) or **Supabase** is best.
-
-### Quick Fix for "Persistence" on Free Tier
-If you just want to share questions *temporarily* or restart often isn't an issue, the current `questions.json` approach on Render works until the next deploy/restart.
+## Note on Data Persistence
+Since this is now a client-side app:
+*   **Default Categories**: Everyone sees the categories defined in `src/data/initialCategories.js`.
+*   **User Edits**: If you (or a user) edits a category, that change is saved to **LocalStorage** on that specific device/browser. It is **not** shared with other users.
+*   This is perfect for a personal learning tool or a standalone app.
