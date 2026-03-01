@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { HashRouter, Routes, Route } from 'react-router-dom'; // Keep HashRouter for GitHub Pages!
 import Home from './pages/Home';
 import Player from './pages/Player';
@@ -65,6 +66,27 @@ function App() {
     }
   };
 
+  const createCategory = async (name = "New Topic") => {
+    const newCategory = {
+      id: uuidv4(),
+      name,
+      content: ''
+    };
+
+    // Add to the top
+    const newCategories = [newCategory, ...categories];
+    setCategories(newCategories);
+    saveLocalCategories(newCategories);
+
+    if (supabase) {
+      setIsSyncing(true);
+      await saveCloudCategories(newCategories);
+      setIsSyncing(false);
+    }
+
+    return newCategory.id;
+  };
+
   return (
     <HashRouter>
       <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30">
@@ -73,6 +95,7 @@ function App() {
             <Home
               categories={categories}
               updateCategory={updateCategory}
+              createCategory={createCategory}
               isSyncing={isSyncing}
               hasCloud={!!supabase}
               speechSpeed={speechSpeed}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Edit2, Check, ChevronRight, Cloud, CloudOff } from 'lucide-react';
+import { Edit2, Check, ChevronRight, Cloud, CloudOff, Plus } from 'lucide-react';
 
-const Home = ({ categories, updateCategory, isSyncing, hasCloud, speechSpeed, setSpeechSpeed }) => {
+const Home = ({ categories, updateCategory, createCategory, isSyncing, hasCloud, speechSpeed, setSpeechSpeed }) => {
     const navigate = useNavigate();
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
@@ -19,6 +19,11 @@ const Home = ({ categories, updateCategory, isSyncing, hasCloud, speechSpeed, se
             updateCategory(cat.id, { name: editName });
         }
         setEditingId(null);
+    };
+
+    const handleCreateNew = async () => {
+        const id = await createCategory("New Topic");
+        navigate(`/player/${id}`);
     };
 
     return (
@@ -61,6 +66,15 @@ const Home = ({ categories, updateCategory, isSyncing, hasCloud, speechSpeed, se
             </header>
 
             <div className="grid gap-4">
+                {/* Create New Card */}
+                <div
+                    onClick={handleCreateNew}
+                    className="group relative bg-indigo-900/40 hover:bg-indigo-800/60 border border-indigo-500/30 hover:border-indigo-400 rounded-2xl p-4 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 text-indigo-300 hover:text-indigo-200"
+                >
+                    <Plus size={24} />
+                    <span className="font-semibold text-lg">Create New</span>
+                </div>
+
                 {categories.map((cat) => (
                     <div
                         key={cat.id}
