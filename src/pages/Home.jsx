@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Edit2, Check, ChevronRight } from 'lucide-react';
+import { Edit2, Check, ChevronRight, Cloud, CloudOff } from 'lucide-react';
 
-const Home = ({ categories, updateCategory }) => {
+const Home = ({ categories, updateCategory, isSyncing, hasCloud, speechSpeed, setSpeechSpeed }) => {
     const navigate = useNavigate();
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
@@ -28,6 +28,36 @@ const Home = ({ categories, updateCategory }) => {
                     Conversation Topics
                 </h1>
                 <p className="text-slate-400 mt-2">Select a category to start listening.</p>
+
+                {/* Status Bar */}
+                <div className="flex items-center gap-2 mt-4 text-xs font-mono">
+                    {hasCloud ? (
+                        isSyncing ? (
+                            <span className="text-yellow-400 flex items-center gap-1"><Cloud size={14} className="animate-pulse" /> Syncing...</span>
+                        ) : (
+                            <span className="text-emerald-500 flex items-center gap-1"><Cloud size={14} /> Saved to Cloud</span>
+                        )
+                    ) : (
+                        <span className="text-slate-600 flex items-center gap-1"><CloudOff size={14} /> Local Storage Only</span>
+                    )}
+                </div>
+
+                {/* Speed Setting */}
+                <div className="flex items-center gap-2 mt-6 p-1 bg-slate-900 border border-slate-800 rounded-xl inline-flex w-full sm:w-auto overflow-x-auto">
+                    <span className="text-sm font-medium text-slate-400 pl-3 pr-2 shrink-0">Speed:</span>
+                    {[0.5, 0.75, 1.0].map(speed => (
+                        <button
+                            key={speed}
+                            onClick={() => setSpeechSpeed(speed)}
+                            className={`flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${speechSpeed === speed
+                                ? 'bg-indigo-600 text-white shadow-md'
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                                }`}
+                        >
+                            {speed * 100}%
+                        </button>
+                    ))}
+                </div>
             </header>
 
             <div className="grid gap-4">
@@ -85,7 +115,7 @@ const Home = ({ categories, updateCategory }) => {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
 

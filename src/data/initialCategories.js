@@ -11,4 +11,5 @@ export const initialCategories = [
     { id: uuidv4(), name: 'Weather', content: 'Il fait beau. The weather is nice.' },
     { id: uuidv4(), name: 'Family', content: 'Voici ma mère. This is my mother.' },
     { id: uuidv4(), name: 'Hobbies', content: 'J\'aime lire. I like to read.' },
+    { id: uuidv4(), name: 'Conversation: Interrogation', content: 'Bonjour Monsieur. Hello Sir.\nBonjour Madame. Hello Madam.\nComment allez-vous ? How are you?\nJe vais bien, merci. I am fine, thank you.\nComment vous appelez-vous ? What is your name?\nJe m\'appelle Thomas. My name is Thomas.' },
 ];

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, Pause, SkipBack, SkipForward, Edit3, Check, X, Volume2 } from 'lucide-react';
 import { useSpeech } from '../hooks/useSpeech';
 
-const Player = ({ categories, updateCategory }) => {
+const Player = ({ categories, updateCategory, speechSpeed = 1.0 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { speak, cancel } = useSpeech();
@@ -55,16 +55,32 @@ const Player = ({ categories, updateCategory }) => {
 
         const textToSpeak = lines[currentIndex];
 
+        // Determine if this is a conversation section
+        const isConversation = category.name.toLowerCase().includes('conversation')
+            || category.name.toLowerCase().includes('interrogation');
+
+        let voiceGender = null;
+        if (isConversation) {
+            // Alternate voices: Start with Male (or 1st), then Female (or 2nd)
+            voiceGender = currentIndex % 2 === 0 ? 'male' : 'female';
+        }
+
         // Speak
-        speak(textToSpeak, 'fr-FR', 1.0, () => {
+        speak(textToSpeak, 'fr-FR', speechSpeed, () => {
             // On End, wait 1 second then go to next
             timeoutRef.current = setTimeout(() => {
                 if (isPlaying) { // Check if still playing after waiting
                     setCurrentIndex(prev => prev + 1);
                 }
             }, 1000);
-        });
+        }, voiceGender);
 
+        return () => {
+            cancel();
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
     }, [isPlaying, currentIndex, lines, speak]);
 
 
@@ -145,7 +161,7 @@ const Player = ({ categories, updateCategory }) => {
     return (
         <div className="h-screen flex flex-col bg-slate-950 relative overflow-hidden">
             {/* Header */}
-            <header className="p-6 flex items-center justify-between z-10">
+            <header className="p-6 flex items-center justify-between z-10 shrink-0">
                 <button onClick={() => navigate('/')} className="p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl text-slate-300 transition-colors">
                     <ArrowLeft size={24} />
                 </button>
@@ -158,38 +174,41 @@ const Player = ({ categories, updateCategory }) => {
             </header>
 
             {/* Main Content (Display Current Sentence) */}
-            <main className="flex-1 flex flex-col items-center justify-center p-6 text-center z-10 relative">
+            <main className="flex-1 min-h-0 overflow-y-auto flex flex-col items-center z-10 relative px-6">
                 <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none" />
 
                 {lines.length > 0 ? (
-                    <div className="w-full max-w-xl">
+                    <div className="w-full max-w-xl my-auto py-12 flex flex-col">
                         {/* Previous line faint */}
                         {currentIndex > 0 && (
-                            <p className="text-slate-600 text-lg mb-8 font-medium transition-all transform scale-95 opacity-50 blur-[1px]">
+                            <p className="text-slate-600 text-lg mb-8 font-medium transition-all transform scale-95 opacity-50 blur-[1px] shrink-0">
                                 {lines[currentIndex - 1]}
                             </p>
                         )}
 
                         {/* Current line prominent */}
-                        <div className="relative py-8">
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight drop-shadow-2xl">
+                        <div className="relative py-4">
+                            <h2 className={`font-black text-white leading-tight drop-shadow-2xl transition-all duration-300 ${lines[currentIndex].length > 150 ? 'text-2xl' :
+                                lines[currentIndex].length > 80 ? 'text-3xl' :
+                                    'text-4xl sm:text-5xl'
+                                }`}>
                                 {lines[currentIndex]}
                             </h2>
                         </div>
 
                         {/* Next line faint */}
                         {currentIndex < lines.length - 1 && (
-                            <p className="text-slate-600 text-lg mt-8 font-medium transition-all transform scale-95 opacity-50 blur-[1px]">
+                            <p className="text-slate-600 text-lg mt-8 font-medium transition-all transform scale-95 opacity-50 blur-[1px] shrink-0">
                                 {lines[currentIndex + 1]}
                             </p>
                         )}
 
-                        <p className="mt-12 text-slate-500 font-mono text-xs tracking-widest uppercase">
+                        <p className="mt-12 text-slate-500 font-mono text-xs tracking-widest uppercase shrink-0">
                             Line {currentIndex + 1} of {lines.length}
                         </p>
                     </div>
                 ) : (
-                    <div className="text-slate-500">
+                    <div className="my-auto text-slate-500 text-center">
                         <p className="mb-4">No content yet.</p>
                         <button onClick={handleEditOpen} className="text-indigo-400 underline decoration-indigo-500/30 underline-offset-4">Add some sentences</button>
                     </div>
@@ -197,7 +216,7 @@ const Player = ({ categories, updateCategory }) => {
             </main>
 
             {/* Controls */}
-            <div className="p-8 pb-12 z-20 bg-gradient-to-t from-slate-950 via-slate-950 to-transparent">
+            <div className="p-8 pb-12 z-20 bg-gradient-to-t from-slate-950 via-slate-950 to-transparent shrink-0">
                 <div className="flex items-center justify-center gap-8 max-w-md mx-auto">
                     {/* Back Button */}
                     <button
@@ -213,8 +232,8 @@ const Player = ({ categories, updateCategory }) => {
                         onClick={togglePlay}
                         disabled={lines.length === 0}
                         className={`p-8 rounded-[2rem] transition-all active:scale-95 shadow-2xl shadow-indigo-500/20 relative group ${isPlaying
-                                ? 'bg-rose-500 text-white hover:bg-rose-400'
-                                : 'bg-indigo-600 text-white hover:bg-indigo-500'
+                            ? 'bg-rose-500 text-white hover:bg-rose-400'
+                            : 'bg-indigo-600 text-white hover:bg-indigo-500'
                             }`}
                     >
                         <div className="relative z-10">

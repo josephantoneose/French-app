@@ -12,11 +12,12 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
-  "homepage": "https://josephantoneose.github.io/french-app",
+  "homepage": "https://josephantoneose.github.io/French-app",
   "dependencies": {
     "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
+    "@supabase/supabase-js": "^2.90.1",
     "body-parser": "^2.2.1",
     "concurrently": "^9.2.1",
     "cors": "^2.8.5",
